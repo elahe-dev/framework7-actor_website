@@ -1,0 +1,60 @@
+﻿@import "variables";
+@mixin flex($dir, $align, $orient, $just) {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: $orient;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: $dir;
+    flex-direction: $dir;
+    -webkit-box-align: $align;
+    -ms-flex-align: $align;
+    align-items: $align;
+    justify-content: $just;
+    -webkit-box-pack: $just;
+    -ms-flex-pack: $just;
+    justify-content: $just;
+}
+
+$font-base: ( x-small: ( font-size: 11, line-height: 14), small: ( font-size: 14, line-height: 20), base: ( font-size: 16, line-height: 18), mid: ( font-size: 18, line-height: 20), mid-large: ( font-size: 20, line-height: 26), large: ( font-size: 25, line-height: 30), x-large: ( font-size: 35, line-height: 39));
+@function _fontset-feature($feature, $family:$font-default, $set: 'base') {
+    $result: map-get(map-get($family, $set), $feature);
+    @return ($result * 1px);
+}
+
+@function fontset-family($family) {
+    $result: map-get($family, stack);
+    @return unquote($result);
+}
+
+@function calc-font-size($set, $family:$font-base) {
+    @return _fontset-feature(font-size, $family, $set);
+}
+
+@function calc-line-height($set, $family:$font-base) {
+    @return _fontset-feature(line-height, $family, $set);
+}
+
+@mixin font-scale ($font-size, $family:$font-base, $line-height:$font-size) {
+    font-size: calc-font-size($font-size, $family);
+    line-height: calc-line-height($line-height, $family);
+    @if $family !=$font-base {
+        font-family: fontset-family($family);
+    }
+}
+
+
+/*media query*/
+
+$breakpoints: ( "phone": 400px, "phone-wide": 480px, "phablet": 560px, "tablet-small": 640px, "tablet": 768px, "tablet-wide": 1024px, "desktop": 1248px, "desktop-wide": 1440px);
+@mixin mq($width, $type: min) {
+    @if map_has_key($breakpoints, $width) {
+        $width: map_get($breakpoints, $width);
+        @if $type==max {
+            $width: $width - 1px;
+        }
+        @media only screen and (#{$type}-width: $width) {
+            @content;
+        }
+    }
+}
