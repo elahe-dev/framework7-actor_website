@@ -1,2 +1,2 @@
 # framework7-actor_website
-framework7 template website design for azarakhsh farahani actor
+framework7 template website designed for azarakhsh farahani actor
